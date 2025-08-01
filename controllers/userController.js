@@ -35,7 +35,20 @@ export class userController {
     return res.json({ token });
   }
   async login(req, res, next) {
+    const { email, password } = req.body;
 
+    const user = await User.findOne({ where: { email } }); //Вытягиваю все поля через email
+
+    if (!user) {
+      return next(ApiError.internal("User with such email not found"));
+    }
+
+    const isPasswordCorrect = bcrypt.compareSync(password, user.password);
+    if (!isPasswordCorrect) {
+      return next(ApiError.internal("Incorrect password"));
+    }
+    const token = generateJwtToken(user.id, user.email, user.role);
+    return res.json({ token });
   }
   async check(req, res, next) {}
   async deleteUser(req, res, next) {}
