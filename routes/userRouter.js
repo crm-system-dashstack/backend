@@ -1,12 +1,11 @@
 import { Router } from "express";
+import userController from "../controllers/userController.js";
 
 const router = Router();
 
-router.post("/registration", (req, res) => {
-  res.send("User registered");
-});
+router.post("/registration", userController.registration);
 
-router.post("/login", (req, res) => {
+router.get("/login", (req, res) => {
   res.send("User logged in");
 });
 
